@@ -5,13 +5,36 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <link rel="stylesheet" href="/css/bb-data-app.min.css" />
-        <title>Document</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+
+        <title>BBDN: Bb Data Webapp</title>
     </head>
     <body>
         <h1>Welcome to the Bb Data Webapp: Custom JS</h1>
+
+        <table class="table" id="basic">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Office</th>
+                    <th>Ext.</th>
+                    <th>Start date</th>
+                    <th>Salary</th>
+                </tr>
+            </thead>
+
+            <tbody></tbody>
+        </table>
+
         <script src="/vendors/rxjs.umd.min.js"></script>
+        <script src="/vendors/simple-datatables.js"></script>
         <script src="/vendors/handlebars-v4.4.3.js"></script>
         <script src="/vendors/custom-elements-es5-adapter.js"></script>
-        <script src="/js/irsc-pathways-ce.bundle.js"></script>
+        <script src="/js/bb-data-app.bundle.js"></script>
     </body>
 </html>

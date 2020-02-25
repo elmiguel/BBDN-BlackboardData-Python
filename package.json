@@ -19,6 +19,8 @@
         "not dead"
     ],
     "dependencies": {
+        "@types/node": "^13.7.4",
+        "simple-datatables": "^2.1.9",
         "ts-loader": "^6.2.1",
         "tslint": "^5.20.0",
         "tslint-sonarts": "^1.9.0",
