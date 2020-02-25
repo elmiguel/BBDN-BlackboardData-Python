@@ -1,0 +1,30 @@
+{
+    "compileOnSave": true,
+    "compilerOptions": {
+        "target": "es6",
+        "lib": [
+            "es2017", "es6", "dom"
+        ],
+        "noImplicitAny": false,
+        "removeComments": true,
+        "preserveConstEnums": true,
+        "sourceMap": true,
+        "allowJs": true,
+        "moduleResolution": "node",
+        "checkJs": true,
+        "allowSyntheticDefaultImports": true,
+        "typeRoots": [
+            "@types"
+        ],
+        "baseUrl": "client",
+        "rootDir": ".",
+        // "outDir": "./public"
+    },
+    "include": [
+        "client/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts",
+    ]
+}

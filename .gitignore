@@ -110,3 +110,4 @@ dmypy.json
 # End of https://www.gitignore.io/api/python
 Config.py
 *.csv
+node_modules
