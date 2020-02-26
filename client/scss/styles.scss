@@ -2,6 +2,7 @@
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
 $dark: #0d152b;
 $gray: #1f2633;
+$blue: #b103e6;
 
 body {
     font-family: 'Noto Sans', sans-serif;
@@ -23,18 +24,20 @@ body>h1 {
     Data Tables
 */
 table {
-    max-width: 90%;
-    padding: 1em;
-    background-color: lighten($dark, 80);
+    padding: 1.5em;
+}
 
-    .dataTable-top {
-        background-color: $gray;
+[class^="dataTable"] {
+    background-color: white;
+}
 
-        .dataTable-dropdown {
-            label {
-                color: white;
-            }
+[class="dataTable-input"] {
+    background-color: internal-light-dark-color(white, black);
+}
 
-        }
-    }
+.dataTable-pagination .active a,
+.dataTable-pagination .active a:focus,
+.dataTable-pagination .active a:hover {
+    background-color: $blue !important;
+    color: white;
 }
