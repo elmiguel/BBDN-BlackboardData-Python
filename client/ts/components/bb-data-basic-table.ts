@@ -1,100 +1,82 @@
 declare var rxjs: any;
+declare var simpleDatatables: any;
 import { BbDataAbstractClass } from '../core/bb-data-abstract-class';
 import { BbDataService, IBbData } from '../core/bb-data-service';
 import { BbDataState, IBbDataState } from '../core/bb-data-state';
 export class BbDataBasicTableComponent extends BbDataAbstractClass {
     static get observedAttributes() {
-        return ['code', 'title', 'level'];
+        return ['queryname'];
     }
     private data: any;
+    private table: any;
+    private dataTable: any;
     private bbDataService: BbDataService = new BbDataService();
     private unsubscribe: any = new rxjs.Subject();
     private template: any;
-    private state: IBbDataState;
+    private queryName: string;
+    private dataState: IBbDataState;
 
     constructor() {
         super();
         // ts can be annoying, se we create a reference to this class
         // slots getters and setters are dynamically added to the class
-        const self: any = this;
+        // so creating self at the top level will reference the current element state
+        // remove this comment if you are experiencing issue with access slots
+        // then reference this.self[slotName] instead of this.slotName
+        // const self: any = this;
 
-        this.template = window.document.querySelector('#irsc-pathway-ce-tmpl');
+        this.template = window.document.createElement('table');
+        console.log('[Bb Data Table - Basic Loaded]');
         this.attachShadow({ mode: 'open' });
-        this.shadowRoot.appendChild(this.template.content.cloneNode(true));
-        self.slotCode = this.shadowRoot.querySelector('slot[name="code"]');
-        self.slotTitle = this.shadowRoot.querySelector('slot[name="title"]');
-        self.slotLevel = this.shadowRoot.querySelector('slot[name="level"]');
-        this.data = this.bbDataService.runQuery();
-        this.state = new BbDataState();
-
-        this.shadowRoot.addEventListener(
-            'request-pathway-code',
-            (event: any) => {
-                event.detail.code = self.code;
-            }
-        );
-        this.shadowRoot.addEventListener(
-            'request-pathway-state',
-            (event: any) => {
-                event.detail.state = this.state;
-            }
-        );
+        this.shadowRoot.appendChild(this.template);
+        this.queryName = this.getAttribute('queryName');
+        console.log(`[queryName] ${this.queryName}`);
+        this.table = this.shadowRoot.querySelector('table');
+        this.dataTable = new simpleDatatables.DataTable(this.table, {
+            data: {},
+            columns: [
+                {
+                    select: 3,
+                    type: 'date',
+                    format: 'MM/DD/YYYY'
+                }
+            ]
+        });
+        this.data = this.bbDataService.runQuery(this.queryName);
+        this.dataState = new BbDataState(this.queryName);
     }
 
     public connectedCallback() {
         this.data
             .pipe(
                 rxjs.operators.takeUntil(this.unsubscribe),
-                rxjs.operators.filter(
-                    (pathway: IPathway) => pathway.code !== null
-                ),
-                rxjs.operators.map((pathway: IPathway) => {
-                    // tslint:disable-next-line: prefer-immediate-return
-                    const _state: IPathwayState = {
-                        code: pathway.code,
-                        data: pathway.data,
-                        controls: {
-                            hasNotes:
-                                pathway.data[pathway.currentTrack].notes
-                                    .length > 0,
-                            showNotes: false,
-                            showPartTime: false,
-                            hasPartTime: pathway.hasPartTime,
-                            title: pathway.hasPartTime
-                                ? 'Full-time (Sample)'
-                                : 'Sample'
-                        },
-                        currentTrack: pathway.currentTrack,
-                        pagination: {
-                            fullTime: {
-                                currentPage: 1,
-                                totalPages:
-                                    pathway.data.fullTime.semesters.length
-                            },
-                            partTime: pathway.hasPartTime
-                                ? {
-                                      currentPage: 1,
-                                      totalPages:
-                                          pathway.data.partTime.semesters.length
-                                  }
-                                : null
-                        },
-                        total: {
-                            title: pathway.isClockHour
-                                ? 'Clock Hours'
-                                : 'Credits',
-                            total:
-                                pathway.data[pathway.currentTrack].creditHours,
-                            isClockHour: pathway.isClockHour
-                        }
-                    };
+                rxjs.operators.filter((data: IBbData) => data !== null),
+                rxjs.operators.map((data: IBbData) => {
+                    // mutate the state if needed then return the new state
+                    // const _state: IBbDataState = { ...data };
+                    // return _state;
 
-                    return _state;
+                    // for now just return the data as state as we do not know what data
+                    // we are returning, return as a copy for demostrative purposes
+                    return { ...data };
                 })
             )
-            .subscribe((data: IPathwayState) => {
-                this.state.updateState(data);
+            .subscribe((data: IBbData) => {
+                const state = {};
+                state[this.queryName] = data;
+                this.dataState.updateState(state);
+                // if you want this to be one-time and not streamed this disconnect...
                 this.disconnectedCallback();
+            });
+
+        this.dataState
+            .getStateSlice(this.queryName)
+            .subscribe((data: IBbData) => {
+                console.log(`[dataState.getStateSlice.subscribe()]`, data);
+                this.dataTable.data = null;
+                this.dataTable.import(data);
+                // this.dataTable.update();
+                // this.dataTable.refresh();
             });
     }
 

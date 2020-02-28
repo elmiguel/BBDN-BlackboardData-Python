@@ -1,7 +1,47 @@
+/*! ../core/bb-data-abstract-class */
+
+/*! ../core/bb-data-service */
+
+/*! ../core/bb-data-state */
+
+/*! ./components/bb-data-basic-table */
+
 /*! all exports used */
 
-/*! no static exports found */
+/*! exports provided: BbDataAbstractClass */
+
+/*! exports provided: BbDataBasicTableComponent */
+
+/*! exports provided: BbDataService */
+
+/*! exports provided: BbDataState */
+
+/*! exports used: BbDataAbstractClass */
+
+/*! exports used: BbDataBasicTableComponent */
+
+/*! exports used: BbDataService */
+
+/*! exports used: BbDataState */
+
+/*! no exports provided */
 
 /*!**********************************!*\
   !*** ./client/ts/bb-data-app.ts ***!
   \**********************************/
+
+/*!*****************************************!*\
+  !*** ./client/ts/core/bb-data-state.ts ***!
+  \*****************************************/
+
+/*!*******************************************!*\
+  !*** ./client/ts/core/bb-data-service.ts ***!
+  \*******************************************/
+
+/*!**************************************************!*\
+  !*** ./client/ts/core/bb-data-abstract-class.ts ***!
+  \**************************************************/
+
+/*!*****************************************************!*\
+  !*** ./client/ts/components/bb-data-basic-table.ts ***!
+  \*****************************************************/
