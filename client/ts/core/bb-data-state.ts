@@ -21,6 +21,7 @@ export class BbDataState {
     }
 
     public getStateSlice(slice: string) {
+        console.log(`[BbDataState.getStateSlice()]`, slice);
         return this.state.pipe(rxjs.operators.pluck(slice));
     }
 

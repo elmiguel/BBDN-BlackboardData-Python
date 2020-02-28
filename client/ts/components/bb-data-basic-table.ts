@@ -73,8 +73,8 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
             .getStateSlice(this.queryName)
             .subscribe((data: IBbData) => {
                 console.log(`[dataState.getStateSlice.subscribe()]`, data);
-                this.dataTable.data = null;
-                this.dataTable.import(data);
+                // this.dataTable.data = null;
+                this.dataTable.insert(data);
                 // this.dataTable.update();
                 // this.dataTable.refresh();
             });
