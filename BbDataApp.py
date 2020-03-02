@@ -28,7 +28,9 @@ app.config.from_object('app_settings')
 app.secret_key = SECRET_KEY
 # login_manager = LoginManager()
 # login_manager.init_app(app)
-cors = CORS(app, allow_headers=[Authorization])
+CORS(app, allow_headers=[Authorization])
+
+
 loopback = FlaskLoopback(app)
 
 # TODO: Setup views, models, apis
@@ -40,13 +42,7 @@ def allow_control_headers(response):
     return response
 
 
-@app.route('/', methods=['GET'])
-# @login_required
-def index():
-    return send_from_directory('public', 'index.html')
-    # return render_template('index.html')
-
-
+from views import *
 # from models import *
 
 # api_manager = APIManager(app,

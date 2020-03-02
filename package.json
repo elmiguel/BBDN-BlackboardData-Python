@@ -6,8 +6,11 @@
     "repository": "git@github.com:elmiguel/BBDN-BlackboardData-Python.git",
     "author": "Michael Bechtel <elmiguelut99@gmail.com>",
     "scripts": {
-        "serve": "run-p webpack",
+        "serve": "run-p build webpack",
+        "server": "python3 ./app.py",
+        "start": "run-p build webpack:no-watch server",
         "webpack": "webpack -w",
+        "webpack:no-watch": "webpack",
         "lint": "tslint --project ./tsconfig.json",
         "build": "tsc"
     },
