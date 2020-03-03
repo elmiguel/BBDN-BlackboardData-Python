@@ -16,12 +16,12 @@ export class BbDataState {
     }
 
     public updateState(state: IBbDataState) {
-        console.log(`[BbDataState.updateState()]`, state);
+        // console.log(`[BbDataState.updateState()]`, state);
         this.state.next(state);
     }
 
     public getStateSlice(slice: string) {
-        console.log(`[BbDataState.getStateSlice()]`, slice);
+        // console.log(`[BbDataState.getStateSlice()]`, slice);
         return this.state.pipe(rxjs.operators.pluck(slice));
     }
 

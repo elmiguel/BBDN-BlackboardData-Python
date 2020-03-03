@@ -17,11 +17,7 @@ app.secret_key = SECRET_KEY
 # login_manager = LoginManager()
 # login_manager.init_app(app)
 CORS(app, allow_headers=[Authorization])
-
-
 loopback = FlaskLoopback(app)
-
-# TODO: Setup views, models, apis
 
 
 def allow_control_headers(response):
@@ -31,6 +27,7 @@ def allow_control_headers(response):
 
 
 setup_views(app)
+# TODO: Setup models, apis
 
 # from models import *
 

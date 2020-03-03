@@ -151,7 +151,7 @@ module.exports = {
             ]
         }, {
             reload: true,
-            injectCss: true
+            // injectCss: true
         })
     ]
 };

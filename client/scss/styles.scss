@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
+@import url('https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css');
 $dark: #0d152b;
 $black: #222222;
 $gray: #1f2633;
 $primary: #c56fd5;
+$secondary: #3485ff;
 
 body {
     font-family: 'Noto Sans', sans-serif;
@@ -11,35 +13,37 @@ body {
     color: white;
 }
 
-h1 {
-    color: $primary
-}
 
 .wrapper {
     max-width: 90%;
     margin: 0 auto;
     background-color: rgba(200, 200, 200, .2);
     padding: 1rem;
+
 }
 
 /* 
     Data Tables
 */
-table {
-    padding: 1.5em;
-}
+bb-data-table-basic {
 
-[class^="dataTable"] {
-    background-color: white;
-}
+    table {
+        display: flex;
+        padding: 1.5em;
+    }
 
-[class="dataTable-input"] {
-    background-color: internal-light-dark-color(white, black);
-}
+    [class^="dataTable"] {
+        background-color: white;
+    }
 
-.dataTable-pagination .active a,
-.dataTable-pagination .active a:focus,
-.dataTable-pagination .active a:hover {
-    background-color: $primary !important;
-    color: white;
+    [class="dataTable-input"] {
+        background-color: internal-light-dark-color(white, black);
+    }
+
+    .dataTable-pagination .active a,
+    .dataTable-pagination .active a:focus,
+    .dataTable-pagination .active a:hover {
+        background-color: $primary !important;
+        color: white;
+    }
 }

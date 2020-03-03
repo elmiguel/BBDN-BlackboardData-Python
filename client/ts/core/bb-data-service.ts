@@ -24,32 +24,27 @@ export class BbDataService {
         this.bbdata = window.bbdata;
     }
 
-    public async runQuery(queryName: string, params: any = null) {
+    public runQuery(queryName: string, params: any = null) {
         if (queryName === 'test') {
-            console.log(`test url: ==> ${bbDataVars.host}/test`);
-            const data = await fetch(`${bbDataVars.host}/test`)
-                .then((res: any) => {
-                    const _data = res.json();
-                    console.log(`inside the then chain res.json()`);
-                    console.log(_data);
-                    return _data.data;
-                })
-                .catch((err: any) => {
-                    console.log('There was a problem loading test query.....');
-                    console.log(err);
-                });
-            return new rxjs.BehaviorSubject(rxjs.from(data)).pipe(
-                rxjs.operators.tap((_data: any) => {
-                    console.log('ASYNC======>');
-                    console.log(_data);
-                })
-            );
+            const url = `${bbDataVars.host}/test`;
+            return new rxjs.BehaviorSubject(
+                rxjs.of(
+                    fetch(url)
+                        .then((res: any) => res.json())
+                        .catch((err: any) => {
+                            console.log(
+                                'There was a problem loading test query.....'
+                            );
+                            console.log(err);
+                        })
+                )
+            ).pipe(rxjs.operators.switchMap((_data: any) => _data));
         }
 
         if (!this.bbdata.hasOwnProperty(queryName)) {
-            const data = await fetch(`${this.bbDataUrl}/${queryName}`)
+            const data = fetch(`${this.bbDataUrl}/${queryName}`)
                 .then((res: any) => res.json())
-                .then(async (res: any) => {
+                .then((res: any) => {
                     // do something with data then return data
                     // TODO: do something with data and return new data
                     return res;
@@ -61,10 +56,7 @@ export class BbDataService {
                     console.log(err);
                 });
 
-            this.bbdata.set(
-                queryName,
-                new rxjs.BehaviorSubject(rxjs.from(data))
-            );
+            this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
         }
 
         return this.bbdata.get(queryName).pipe(
