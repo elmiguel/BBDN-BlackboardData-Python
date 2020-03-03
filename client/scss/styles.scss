@@ -1,16 +1,18 @@
 @import url('https://fonts.googleapis.com/css?family=Noto+Sans&display=swap');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css');
 $dark: #0d152b;
+$black: #222222;
 $gray: #1f2633;
-$blue: #b103e6;
+$primary: #c56fd5;
 
 body {
     font-family: 'Noto Sans', sans-serif;
     background-color: $dark;
+    color: white;
 }
 
-body>h1 {
-    color: white;
+h1 {
+    color: $primary
 }
 
 .wrapper {
@@ -38,6 +40,6 @@ table {
 .dataTable-pagination .active a,
 .dataTable-pagination .active a:focus,
 .dataTable-pagination .active a:hover {
-    background-color: $blue !important;
+    background-color: $primary !important;
     color: white;
 }

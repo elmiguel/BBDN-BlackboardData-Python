@@ -1,3 +1,5 @@
+/*! ../bb-data-variables */
+
 /*! ../core/bb-data-abstract-class */
 
 /*! ../core/bb-data-service */
@@ -16,6 +18,8 @@
 
 /*! exports provided: BbDataState */
 
+/*! exports provided: bbDataVars */
+
 /*! exports used: BbDataAbstractClass */
 
 /*! exports used: BbDataBasicTableComponent */
@@ -24,11 +28,17 @@
 
 /*! exports used: BbDataState */
 
+/*! exports used: bbDataVars */
+
 /*! no exports provided */
 
 /*!**********************************!*\
   !*** ./client/ts/bb-data-app.ts ***!
   \**********************************/
+
+/*!****************************************!*\
+  !*** ./client/ts/bb-data-variables.ts ***!
+  \****************************************/
 
 /*!*****************************************!*\
   !*** ./client/ts/core/bb-data-state.ts ***!

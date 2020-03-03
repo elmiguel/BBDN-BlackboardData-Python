@@ -19,6 +19,10 @@ module.exports = {
     mode: 'development',
     // mode: 'production',
     devtool: 'source-map',
+    watchOptions: {
+        poll: true,
+        ignored: /node_modules/
+    },
     optimization: {
         usedExports: true,
         splitChunks: {
@@ -58,7 +62,7 @@ module.exports = {
     },
     entry: {
         'public/js/bb-data-app.bundle': './client/ts/bb-data-app.ts',
-        'public/css/bb-data-app.min': './client/scss/styles.scss',
+        'public/css/bb-data-app.min': './client/scss/styles.scss'
     },
     output: {
         path: path.resolve(__dirname, ''),
@@ -132,15 +136,22 @@ module.exports = {
             chunkFilename: '[id].css'
         }),
         new BrowserSyncPlugin({
-            // browse to http://localhost:3000/ during development,
+            // browse to http://localhost:5000/ during development,
             // ./public directory is being served
             host: 'localhost',
             port: 3000,
             open: false,
-            server: {
-                baseDir: ['public']
-            },
-            files: ['./public/*.html']
+            proxy: 'http://localhost:5000/',
+            // server: {
+            //     baseDir: ['public']
+            // },
+            files: [
+                './public/*.html',
+                './public/*.css'
+            ]
+        }, {
+            reload: true,
+            injectCss: true
         })
     ]
 };

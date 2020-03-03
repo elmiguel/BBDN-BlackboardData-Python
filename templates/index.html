@@ -4,9 +4,30 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Document</title>
+        <link
+            rel="stylesheet"
+            href="{{ url_for('static', filename='css/bb-data-app.min.css') }}"
+        />
+
+        <link
+            href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+
+        <title>BBDN: Bb Data Webapp</title>
     </head>
     <body>
         <h1>Welcome to the Bb Data Webapp: Python Views</h1>
+
+        <bb-data-table-basic queryname="test"></bb-data-table-basic>
+
+        <script src="{{ url_for('static', filename='vendors/rxjs.umd.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendors/simple-datatables.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendors/handlebars-v4.4.3.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendors/custom-elements-es5-adapter.js') }}"></script>
+        <script src="{{ url_for('static', filename='vendors/custom-elements-es5-adapter.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bb-data-variables.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/bb-data-app.bundle.js') }}"></script>
     </body>
 </html>

@@ -1,14 +1,16 @@
 declare var window: any;
 declare var rxjs: any;
-
+import { bbDataVars } from '../bb-data-variables';
 export interface IBbData {
     [key: string]: any;
 }
 
 export class BbDataService {
+    // tslint:ignore
     public bbdata: any;
     private unsubscribe: any = new rxjs.Subject();
-    private bbDataUrl: string = 'http://localhost:3000/queries';
+    private bbDataUrl: string = `${bbDataVars.host}/queries`;
+
     constructor() {
         // console.(this.http);
         if (!window.hasOwnProperty('bbdata')) {
@@ -22,22 +24,16 @@ export class BbDataService {
         this.bbdata = window.bbdata;
     }
 
-    // public async getClockHoursFilter() {
-    //     this.clockHoursFilter = await fetch(this.filterUrl)
-    //         .then((res: any) => res.json())
-    //         .then((res: any) => res.filter)
-    //         .catch((err: any) => {
-    //             console.log(
-    //                 'There was an error retrieving the clock hours filter.'
-    //             );
-    //             console.log(err.message);
-    //         });
-    // }
-
     public async runQuery(queryName: string, params: any = null) {
         if (queryName === 'test') {
-            const data = await fetch('http://localhost:5000/test')
-                .then((res: any) => res.json())
+            console.log(`test url: ==> ${bbDataVars.host}/test`);
+            const data = await fetch(`${bbDataVars.host}/test`)
+                .then((res: any) => {
+                    const _data = res.json();
+                    console.log(`inside the then chain res.json()`);
+                    console.log(_data);
+                    return _data.data;
+                })
                 .catch((err: any) => {
                     console.log('There was a problem loading test query.....');
                     console.log(err);

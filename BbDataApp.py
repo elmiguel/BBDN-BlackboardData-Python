@@ -1,3 +1,4 @@
+from views import *
 from flask import Flask
 # from flask.ext.cors.extension import CORS
 from flask_cors import CORS
@@ -6,24 +7,11 @@ from flask_loopback import FlaskLoopback
 from flask_restless import APIManager
 from werkzeug.datastructures import Authorization
 from app_settings import SECRET_KEY
-
-# =============================
-# TODO: Migrate these over to view.py
-# =============================
-from flask import redirect, request
-from flask.templating import render_template
-from flask_wtf import Form
-from flask.helpers import flash, url_for, send_from_directory
-from flask.json import jsonify
-from flask_login import login_required, current_user, logout_user, login_user
-from flask_restless import ProcessingException
-import requests
-from wtforms.fields.core import StringField
-from wtforms.fields.simple import PasswordField, SubmitField
+from views import setup_views
 # =============================
 # =============================
 
-app = Flask(__name__, static_url_path='/public')
+app = Flask(__name__, static_url_path='/public', static_folder='public')
 app.config.from_object('app_settings')
 app.secret_key = SECRET_KEY
 # login_manager = LoginManager()
@@ -42,7 +30,8 @@ def allow_control_headers(response):
     return response
 
 
-from views import *
+setup_views(app)
+
 # from models import *
 
 # api_manager = APIManager(app,
