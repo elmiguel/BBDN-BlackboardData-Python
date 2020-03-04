@@ -42,6 +42,7 @@ export class BbDataService {
         }
 
         if (!this.bbdata.hasOwnProperty(queryName)) {
+            this.bbdata[queryName] = null;
             const data = fetch(`${this.bbDataUrl}/${queryName}`)
                 .then((res: any) => res.json())
                 .then((res: any) => {
@@ -55,11 +56,13 @@ export class BbDataService {
                     );
                     console.log(err);
                 });
-
-            this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
+            // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
+            // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
+            this.bbdata[queryName] = new rxjs.BehaviorSubject(data);
         }
-
-        return this.bbdata.get(queryName).pipe(
+        // console.log(this.bbdata);
+        // return this.bbdata.get(queryName).pipe(
+        return this.bbdata[queryName].pipe(
             rxjs.operators.takeUntil(this.unsubscribe),
             rxjs.operators.switchMap((data: any) => rxjs.from(data))
         );

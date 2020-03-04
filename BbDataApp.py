@@ -6,8 +6,9 @@ from flask_cors import CORS
 from flask_loopback import FlaskLoopback
 from flask_restless import APIManager
 from werkzeug.datastructures import Authorization
-from app_settings import SECRET_KEY
+from app_settings import *
 from views import setup_views
+from BbDataTool import BbDataTool
 # =============================
 # =============================
 
@@ -18,6 +19,7 @@ app.secret_key = SECRET_KEY
 # login_manager.init_app(app)
 CORS(app, allow_headers=[Authorization])
 loopback = FlaskLoopback(app)
+bbdt = BbDataTool(app)
 
 
 def allow_control_headers(response):
@@ -26,7 +28,7 @@ def allow_control_headers(response):
     return response
 
 
-setup_views(app)
+setup_views(app, bbdt)
 # TODO: Setup models, apis
 
 # from models import *

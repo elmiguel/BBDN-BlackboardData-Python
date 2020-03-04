@@ -1,4 +1,4 @@
-from flask import redirect, request
+from flask import redirect
 from flask.templating import render_template
 from flask_wtf import Form
 from flask.helpers import flash, url_for, send_from_directory, send_file
@@ -6,6 +6,7 @@ from flask.json import jsonify
 from flask_login import login_required, current_user, logout_user, login_user
 from flask_restless import ProcessingException
 import requests
+from httplib2 import Http
 from wtforms.fields.core import StringField
 from wtforms.fields.simple import PasswordField, SubmitField
 from app_settings import QUERY_REPO, RAW_SQL_URL, RAW_VARS_URL
@@ -13,7 +14,7 @@ from sample_data import SAMPLE_DATA
 import json
 
 
-def setup_views(app):
+def setup_views(app, bbdt):
 
     def allow_control_headers(response):
         response.headers['Access-Control-Allow-Origin'] = '*'
@@ -44,21 +45,32 @@ def setup_views(app):
     @app.route('/queries/<query_name>', methods=['GET'])
     # @login_required
     def query_by_name(query_name):
-        print('query requested')
-        variables = requests.get(RAW_VARS_URL.replace(
-            '{query_name}', query_name)).json()['variables']
-        query = requests.get(RAW_SQL_URL.replace(
-            '{query_name}', query_name)).text
-        # print(json.dumps(varibles, indent=4))
+        print(RAW_VARS_URL.replace('{query_name}', query_name))
+        h = Http()
+        resp, var_content = h.request(
+            RAW_VARS_URL.replace('{query_name}', query_name),
+            "GET",
+            body=None)
+        variables = json.loads(var_content)['variables']
 
-        # ensure that if there are vars, then inject them into the query
+        # variables = requests.get(RAW_VARS_URL.replace(
+        #     '{query_name}', query_name)).json()['variables']
+        resp, sql_content = h.request(RAW_SQL_URL.replace(
+            '{query_name}', query_name), 'GET', body=None)
+        # query = requests.get(RAW_SQL_URL.replace(
+        #     '{query_name}', query_name)).text
+        query = str(sql_content)[2:-1].replace('\\n', ' ')
+        # # # print(json.dumps(varibles, indent=4))
+
+        # # # ensure that if there are vars, then inject them into the query
         for key, value in variables.items():
             print(key, value)
             query = query.replace('{' + key + '}', str(value))
-
-        return jsonify({
-            'query': query
-        })
+        data = bbdt.run_query(query)
+        # data = {'data': 'this is just a test'}
+        data['headings'] = data['columns']
+        del data['columns']
+        return jsonify(data)
 
     @app.route('/test', methods=['GET'])
     # @login_required
