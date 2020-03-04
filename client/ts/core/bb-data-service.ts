@@ -25,7 +25,7 @@ export class BbDataService {
     }
 
     public runQuery(queryName: string, params: any = null) {
-        if (queryName === 'test') {
+        if (queryName === 'test' || queryName === '') {
             const url = `${bbDataVars.host}/test`;
             return new rxjs.BehaviorSubject(
                 rxjs.of(

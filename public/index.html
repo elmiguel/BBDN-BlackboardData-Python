@@ -12,36 +12,87 @@
         <h1>Welcome to the Bb Data Webapp: Custom JS</h1>
         <p>hello</p>
         <div class="wrapper">
-            <!-- <bb-data-table-basic
-                queryname="test"
-                select="3"
-                type="date"
-                format="MM/DD/YYYY"
-            ></bb-data-table-basic> -->
+            <div class="side-nav">
+                <ul class="nav">
+                    <li>
+                        <a
+                            class="button query"
+                            data-query-config='{"queryname": "test"}'
+                            >Example</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="button query"
+                            data-query-config='{"queryname": "time-spent-in-learn"}'
+                            >Time Spent In Learn</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="button query"
+                            data-query-config='{"queryname": "time-spent-in-collab"}'
+                            >Time Spent In Collaborate</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            class="button query"
+                            data-query-config='{"queryname": "activity-equals-success"}'
+                            >Activity Equals Success</a
+                        >
+                    </li>
+                </ul>
+            </div>
+            <div class="content">
+                <bb-data-table-basic
+                    id="bb-data-demo"
+                    queryname=""
+                    select="3"
+                    type="date"
+                    format="MM/DD/YYYY"
+                ></bb-data-table-basic>
 
-            <!-- <bb-data-table-basic
+                <div class="h-spacer"></div>
+                <!-- <bb-data-table-basic
                 queryname="activity-equals-success"
                 select="3"
                 type="date"
                 format="MM/DD/YYYY"
             ></bb-data-table-basic> -->
 
-            <!-- <bb-data-table-basic
+                <!-- <bb-data-table-basic
                 queryname="time-spent-in-learn"
                 select="3"
                 type="date"
                 format="MM/DD/YYYY"
             ></bb-data-table-basic> -->
 
-            <bb-data-table-basic
-                queryname="time-spent-in-collab"
-                select="3"
-                type="date"
-                format="MM/DD/YYYY"
-            ></bb-data-table-basic>
+                <!-- <bb-data-table-basic
+                    queryname="time-spent-in-collab"
+                    select="3"
+                    type="date"
+                    format="MM/DD/YYYY"
+                ></bb-data-table-basic> -->
+            </div>
         </div>
         <template id="bb-data-table-basic-tmpl">
             <link rel="stylesheet" href="/public/css/bb-data-app.min.css" />
+            <style>
+                @import url('https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css');
+                [class*='dataTable-wrapper'] {
+                    background-color: white;
+                    color: var(--dt-table-color);
+                }
+
+                .dataTable-pagination .active a,
+                .dataTable-pagination .active a:focus,
+                .dataTable-pagination .active a:hover {
+                    background-color: #c56fd5 !important;
+                    color: white;
+                }
+            </style>
+
             <table></table>
         </template>
         <script src="/public/vendors/rxjs.umd.min.js"></script>

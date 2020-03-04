@@ -79,12 +79,15 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
     // Called anytime the 'selected' attribute is changed
     // BbDataAbstractClass contains this function, so consider
     // this as an override
-    // public attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
-    //     if (oldVal !== newVal) {
-    //         console.log(attrName, oldVal, newVal);
-    //     }
-    //     this[attrName] = newVal;
-    // }
+    public attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
+        if (oldVal !== newVal) {
+            console.log(attrName, oldVal, newVal);
+            if (attrName === 'queryname' && newVal !== null) {
+                this.data = this.bbDataService.runQuery(newVal);
+                this[attrName] = newVal;
+            }
+        }
+    }
 
     public updateTable(data: any) {
         // this.dataTable.import(data);
