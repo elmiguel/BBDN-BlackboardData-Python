@@ -19,6 +19,7 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     private type: string;
     private format: string;
     private self: any;
+    private dataState: any = null;
     constructor() {
         super();
         // ts can be annoying, se we create a reference to this class
@@ -42,8 +43,6 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
         this.format = this.getAttribute('format');
         console.log(`[queryName] ${this.queryName}`);
         // this.data = this.bbDataService.runQuery(this.queryName);
-        this.data = rxjs.combineLatest([this.queryNameSub]);
-        this.dataState = new BbDataState(this.queryName);
     }
 
     public connectedCallback() {
@@ -55,12 +54,18 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     }
 
     public updateData() {
-        this.data
+        rxjs.combineLatest([this.queryNameSub])
             .pipe(
                 rxjs.operators.takeUntil(this.unsubscribe),
                 rxjs.operators.tap((latest: any) =>
                     console.log(`The current latest....`, latest)
                 ),
+                rxjs.operators.map(([queryName]: any) => {
+                    if (!this.dataState) {
+                        this.dataState = new BbDataState(this.queryName);
+                    }
+                    return [queryName];
+                }),
                 rxjs.operators.distinctUntilChanged(),
                 rxjs.operators.filter(([queryName]: any) => queryName !== null),
                 rxjs.operators.map(([queryName]: any) =>
