@@ -18,7 +18,7 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
     private type: string;
     private format: string;
     private dataState: IBbDataState;
-
+    private self: any;
     constructor() {
         super();
         // ts can be annoying, se we create a reference to this class
@@ -26,7 +26,7 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
         // so creating self at the top level will reference the current element state
         // remove this comment if you are experiencing issue with access slots
         // then reference this.self[slotName] instead of this.slotName
-        // const self: any = this;
+        this.self = this;
 
         // this.template = window.document.createElement('table');
         this.template = window.document.getElementById(
@@ -58,6 +58,10 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
                     // for now just return the data as state as we do not know what data
                     // we are returning, return as a copy for demostrative purposes
                     return data;
+                }),
+                rxjs.operators.tap((data: any) => {
+                    console.log('some random log.....');
+                    console.log(data);
                 })
             )
             .subscribe((data: IBbData) => {
@@ -79,11 +83,28 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
     // Called anytime the 'selected' attribute is changed
     // BbDataAbstractClass contains this function, so consider
     // this as an override
-    public attributeChangedCallback(attrName: any, oldVal: any, newVal: any) {
+    public async attributeChangedCallback(
+        attrName: any,
+        oldVal: any,
+        newVal: any
+    ) {
         if (oldVal !== newVal) {
             console.log(attrName, oldVal, newVal);
-            if (attrName === 'queryname' && newVal !== null) {
-                this.data = this.bbDataService.runQuery(newVal);
+            if (attrName === 'queryname' && newVal) {
+                const data = await this.bbDataService.runQuery(newVal);
+                console.log('changing data..........');
+                console.log(data);
+                data.pipe(
+                    rxjs.operators.take(1),
+                    rxjs.operators.tap((d: any) => {
+                        console.log('We have new updated data!!!!!');
+                        console.log('=========');
+                        console.log(d);
+                        console.log('=========');
+                    })
+                ).subscribe((updatedData: any) =>
+                    this.data.next(rxjs.of(updatedData))
+                );
                 this[attrName] = newVal;
             }
         }
@@ -94,6 +115,8 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
         // console.log(this.table);
 
         this.table = this.shadowRoot.querySelector('table');
+        this.table.innerHTML = '';
+        console.log('in bewtween data loading.......');
         this.dataTable = new simpleDatatables.DataTable(this.table, {
             data,
             columns: [
