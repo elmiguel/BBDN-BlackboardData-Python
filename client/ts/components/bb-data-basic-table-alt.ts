@@ -18,7 +18,6 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     private select: string;
     private type: string;
     private format: string;
-    private dataState: IBbDataState;
     private self: any;
     constructor() {
         super();
@@ -50,6 +49,7 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     public connectedCallback() {
         this.dataState.state.subscribe((data: any) => {
             console.log('State Changed!');
+            console.log(data);
         });
         this.updateData();
     }
@@ -63,17 +63,19 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
                 ),
                 rxjs.operators.distinctUntilChanged(),
                 rxjs.operators.filter(([queryName]: any) => queryName !== null),
-                rxjs.operators.tap(([queryName]: any) =>
-                    console.log(`The current queryName is: ${queryName}`)
-                ),
-                rxjs.operators.switchMap(([queryName]: any) => [
-                    queryName,
+                rxjs.operators.map(([queryName]: any) =>
                     this.bbDataService.runQuery(queryName)
-                ]),
+                ),
+                rxjs.operators.withLatestFrom(),
+                rxjs.operators.tap(([queryName, data]: [string, IBbData]) => {
+                    console.log(`The current queryName is: ${queryName}`);
+                    console.log(`The current data is:`, data);
+                }),
                 rxjs.operators.filter(
                     ([queryName, data]: [string, IBbData]) =>
                         queryName !== null && data !== null
                 ),
+
                 rxjs.operators.map(
                     async ([queryName, data]: [string, IBbData]) => {
                         // mutate the state if needed then return the new state

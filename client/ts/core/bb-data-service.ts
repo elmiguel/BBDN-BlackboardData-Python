@@ -1,6 +1,7 @@
 declare var window: any;
 declare var rxjs: any;
 import { bbDataVars } from '../bb-data-variables';
+import { IBbDataState } from './bb-data-state';
 export interface IBbData {
     [key: string]: any;
 }
@@ -10,9 +11,9 @@ export class BbDataService {
     public bbdata: any;
     private unsubscribe: any = new rxjs.Subject();
     private bbDataUrl: string = `${bbDataVars.host}/queries`;
+    private dataState: IBbDataState;
 
     constructor() {
-        // console.(this.http);
         if (!window.hasOwnProperty('bbdata')) {
             window.bbdata = {};
         }
@@ -36,6 +37,10 @@ export class BbDataService {
         return false;
     }
 
+    public addToBbData(queryName: string, data: any = null) {
+        this.bbdata.set(queryName, data);
+    }
+
     public runQuery(queryName: string, params: any = null) {
         if (this.isTest(queryName)) {
             return new rxjs.BehaviorSubject(
@@ -53,7 +58,6 @@ export class BbDataService {
         }
         console.log('this should not run if test!!!!');
         if (!this.bbdata.hasOwnProperty(queryName) && !this.isTest(queryName)) {
-            this.bbdata[queryName] = null;
             const data = fetch(`${this.bbDataUrl}/${queryName}`)
                 .then((res: any) => res.json())
                 .then((res: any) => {
@@ -69,7 +73,7 @@ export class BbDataService {
                 });
             // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
             // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
-            this.bbdata[queryName] = new rxjs.BehaviorSubject(data);
+            this.bbdata(queryName, new rxjs.BehaviorSubject(data));
         }
         // console.log(this.bbdata);
         // return this.bbdata.get(queryName).pipe(
