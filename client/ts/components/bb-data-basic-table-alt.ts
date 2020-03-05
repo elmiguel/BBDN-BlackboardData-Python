@@ -19,7 +19,7 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     private type: string;
     private format: string;
     private self: any;
-    private dataState: any = null;
+    private dataState: any = new BbDataState();
     constructor() {
         super();
         // ts can be annoying, se we create a reference to this class
@@ -37,7 +37,6 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
         this.attachShadow({ mode: 'open' });
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
         this.queryName = this.getAttribute('queryname');
-        // this.queryNameSub.next(this.queryName);
         this.select = this.getAttribute('select');
         this.type = this.getAttribute('type');
         this.format = this.getAttribute('format');
@@ -54,46 +53,49 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     }
 
     public updateData() {
-        rxjs.combineLatest([this.queryNameSub])
+        rxjs.combineLatest([this.queryNameSub, this.dataState.state])
             .pipe(
                 rxjs.operators.takeUntil(this.unsubscribe),
-                rxjs.operators.tap((latest: any) =>
-                    console.log(`The current latest....`, latest)
-                ),
-                rxjs.operators.map(([queryName]: any) => {
-                    if (!this.dataState) {
-                        this.dataState = new BbDataState(this.queryName);
-                    }
-                    return [queryName];
-                }),
-                rxjs.operators.distinctUntilChanged(),
-                rxjs.operators.filter(([queryName]: any) => queryName !== null),
-                rxjs.operators.map(([queryName]: any) =>
-                    this.bbDataService.runQuery(queryName)
-                ),
-                rxjs.operators.withLatestFrom(),
-                rxjs.operators.tap(([queryName, data]: [string, IBbData]) => {
-                    console.log(`The current queryName is: ${queryName}`);
-                    console.log(`The current data is:`, data);
-                }),
                 rxjs.operators.filter(
-                    ([queryName, data]: [string, IBbData]) =>
-                        queryName !== null && data !== null
+                    ([queryName, dataState]: [string, any]) => queryName
                 ),
-
-                rxjs.operators.map(
-                    async ([queryName, data]: [string, IBbData]) => {
-                        // mutate the state if needed then return the new state
-                        const _state: IBbDataState = { queryName: data };
-                        // return _state;
-                        // for now just return the data as state as we do not know what data
-                        // we are returning, return as a copy for demostrative purposes
-                        this.dataState.updateState(_state);
+                rxjs.operators.flatMap(
+                    ([queryName, dataState]: [string, any]) => {
+                        console.log(`The current queryName....`, queryName);
+                        console.log(`The current dataState....`, dataState);
+                        if (
+                            Object.keys(dataState).length === 0 ||
+                            !dataState ||
+                            !dataState.hasOwnProperty(queryName)
+                        ) {
+                            this.bbDataService.runQuery(queryName);
+                        }
+                        return rxjs.combineLatest([
+                            this.queryNameSub,
+                            this.dataState.getStateSlice(queryName)
+                        ]);
                     }
-                )
+                ),
+                rxjs.operators.distinctUntilChanged()
+
+                // rxjs.operators.map(([queryName, dataState]: [string, any]) =>
+                //     this.bbDataService.runQuery(queryName)
+                // ),
+                // rxjs.operators.map(
+                //     async ([queryName, data]: [string, IBbData]) => {
+                //         // mutate the state if needed then return the new state
+                //         const _state: IBbDataState = { queryName: data };
+                //         // return _state;
+                //         // for now just return the data as state as we do not know what data
+                //         // we are returning, return as a copy for demostrative purposes
+                //         this.dataState.updateState(_state);
+                //     }
+                // )
             )
-            .subscribe(() => {
+            .subscribe(([queryName, dataState]: [string, any]) => {
                 console.log('[this.data.pipe.subscribe]');
+                console.log(queryName);
+                console.log(dataState);
                 // if you want this to be one-time and not streamed this disconnect...
                 // this.disconnectedCallback();
             });
@@ -112,7 +114,7 @@ export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
         newVal: any
     ) {
         if (oldVal !== newVal) {
-            console.log(attrName, oldVal, newVal);
+            // console.log(attrName, oldVal, newVal);
             if (attrName === 'queryname' && newVal) {
                 this[attrName] = newVal;
                 this.queryNameSub.next(newVal);

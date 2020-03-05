@@ -42,45 +42,37 @@ export class BbDataService {
     }
 
     public runQuery(queryName: string, params: any = null) {
+        console.log(`[BbDataState.runQuery('${queryName}', ${params})]`);
         if (this.isTest(queryName)) {
-            return new rxjs.BehaviorSubject(
-                rxjs.of(
-                    fetch(`${bbDataVars.host}/test`)
-                        .then((res: any) => res.json())
-                        .catch((err: any) => {
-                            console.log(
-                                'There was a problem loading test query.....'
-                            );
-                            console.log(err);
-                        })
-                )
-            ).pipe(rxjs.operators.switchMap((_data: any) => _data));
-        }
-        console.log('this should not run if test!!!!');
-        if (!this.bbdata.hasOwnProperty(queryName) && !this.isTest(queryName)) {
-            const data = fetch(`${this.bbDataUrl}/${queryName}`)
+            console.log(`${bbDataVars.host}/test`);
+            fetch(`${bbDataVars.host}/test`)
                 .then((res: any) => res.json())
-                .then((res: any) => {
-                    // do something with data then return data
-                    // TODO: do something with data and return new data
-                    return res;
+                .then((_data: any) => {
+                    this.dataState.updateState(queryName, _data);
                 })
                 .catch((err: any) => {
-                    console.log(
-                        `There was an error in retrieving data with queryName: ${queryName}`
-                    );
+                    console.log('There was a problem loading test query.....');
                     console.log(err);
                 });
-            // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
-            // this.bbdata.set(queryName, new rxjs.BehaviorSubject(data));
-            this.bbdata(queryName, new rxjs.BehaviorSubject(data));
+        } else {
+            console.log('this should not run if test!!!!');
+            if (
+                !this.bbdata.hasOwnProperty(queryName) &&
+                !this.isTest(queryName)
+            ) {
+                fetch(`${this.bbDataUrl}/${queryName}`)
+                    .then((res: any) => res.json())
+                    .then((data: any) => {
+                        this.dataState.updateState(queryName, data);
+                    })
+                    .catch((err: any) => {
+                        console.log(
+                            `There was an error in retrieving data with queryName: ${queryName}`
+                        );
+                        console.log(err);
+                    });
+            }
         }
-        // console.log(this.bbdata);
-        // return this.bbdata.get(queryName).pipe(
-        return this.bbdata[queryName].pipe(
-            rxjs.operators.takeUntil(this.unsubscribe),
-            rxjs.operators.switchMap((data: any) => rxjs.from(data))
-        );
     }
 
     public disconnectedCallback() {

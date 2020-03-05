@@ -1,3 +1,4 @@
+declare var window: any;
 declare var rxjs: any;
 export interface IBbDataState {
     [key: string]: any;
@@ -5,14 +6,21 @@ export interface IBbDataState {
 export class BbDataState {
     public state: any;
     private _unsubscribe: any = new rxjs.Subject();
-    constructor(queryName: string) {
+    constructor() {
         // setup _state filtering...
+
+        if (!window.hasOwnProperty('bbdata')) {
+            window.bbdata = {};
+        }
+
+        if (!window.bbdata.hasOwnProperty('BbDataState')) {
+            window.bbdata.BbDataState = this;
+        }
+
         const INITIAL_STATE: IBbDataState = {};
         this.state = new rxjs.BehaviorSubject(INITIAL_STATE).pipe(
             rxjs.operators.distinctUntilChanged(),
-            rxjs.operators.filter(
-                (_state: IBbDataState) => _state && _state[queryName]
-            )
+            rxjs.operators.filter((_state: IBbDataState) => _state)
         );
     }
 
