@@ -43,12 +43,15 @@ export class BbDataAbstractClass extends HTMLElement {
         oldValue: any,
         newValue: any
     ) {
-        const slot: any = this[
-            `slot${this.titleize(this.pascalCase(attrName))}`
-        ];
+        if (oldValue !== newValue) {
+            console.log('Abstract attributeChangedCallback....');
+            const slot: any = this[
+                `slot${this.titleize(this.pascalCase(attrName))}`
+            ];
 
-        if (slot) {
-            slot.innerText = newValue;
+            if (slot) {
+                slot.innerText = newValue;
+            }
         }
     }
 

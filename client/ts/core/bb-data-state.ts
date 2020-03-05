@@ -9,6 +9,7 @@ export class BbDataState {
         // setup _state filtering...
         const INITIAL_STATE: IBbDataState = {};
         this.state = new rxjs.BehaviorSubject(INITIAL_STATE).pipe(
+            rxjs.operators.distinctUntilChanged(),
             rxjs.operators.filter(
                 (_state: IBbDataState) => _state && _state[queryName]
             )
@@ -16,7 +17,7 @@ export class BbDataState {
     }
 
     public updateState(state: IBbDataState) {
-        // console.log(`[BbDataState.updateState()]`, state);
+        console.log(`[BbDataState.updateState()]`, state);
         this.state.next(state);
     }
 

@@ -96,6 +96,26 @@
 
             <table></table>
         </template>
+        <template id="bb-data-table-basic-tmpl-alt">
+            <link rel="stylesheet" href="/public/css/bb-data-app.min.css" />
+            <style>
+                @import url('https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css');
+                [class*='dataTable-wrapper'] {
+                    background-color: white;
+                    color: var(--dt-table-color);
+                }
+
+                .dataTable-pagination .active a,
+                .dataTable-pagination .active a:focus,
+                .dataTable-pagination .active a:hover {
+                    background-color: #c56fd5 !important;
+                    color: white;
+                }
+            </style>
+
+            <div id="bbdata">Intial Data</div>
+            <table></table>
+        </template>
         <script src="/public/vendors/rxjs.umd.min.js"></script>
         <script src="/public/vendors/simple-datatables.js"></script>
         <script src="/public/vendors/handlebars-v4.4.3.js"></script>

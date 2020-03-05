@@ -6,8 +6,6 @@
 
 /*! ../core/bb-data-state */
 
-/*! ./components/bb-data-basic-table */
-
 /*! ./components/bb-data-basic-table-alt */
 
 /*! all exports used */
@@ -15,8 +13,6 @@
 /*! exports provided: BbDataAbstractClass */
 
 /*! exports provided: BbDataBasicTableAltComponent */
-
-/*! exports provided: BbDataBasicTableComponent */
 
 /*! exports provided: BbDataService */
 
@@ -27,8 +23,6 @@
 /*! exports used: BbDataAbstractClass */
 
 /*! exports used: BbDataBasicTableAltComponent */
-
-/*! exports used: BbDataBasicTableComponent */
 
 /*! exports used: BbDataService */
 
@@ -57,10 +51,6 @@
 /*!**************************************************!*\
   !*** ./client/ts/core/bb-data-abstract-class.ts ***!
   \**************************************************/
-
-/*!*****************************************************!*\
-  !*** ./client/ts/components/bb-data-basic-table.ts ***!
-  \*****************************************************/
 
 /*!*********************************************************!*\
   !*** ./client/ts/components/bb-data-basic-table-alt.ts ***!

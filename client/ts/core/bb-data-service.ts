@@ -24,12 +24,23 @@ export class BbDataService {
         this.bbdata = window.bbdata;
     }
 
+    public isTest(queryName: string): boolean {
+        if (
+            !queryName ||
+            queryName === 'test' ||
+            queryName === '' ||
+            typeof queryName === 'undefined'
+        ) {
+            return true;
+        }
+        return false;
+    }
+
     public runQuery(queryName: string, params: any = null) {
-        if (queryName === 'test' || queryName === '') {
-            const url = `${bbDataVars.host}/test`;
+        if (this.isTest(queryName)) {
             return new rxjs.BehaviorSubject(
                 rxjs.of(
-                    fetch(url)
+                    fetch(`${bbDataVars.host}/test`)
                         .then((res: any) => res.json())
                         .catch((err: any) => {
                             console.log(
@@ -40,8 +51,8 @@ export class BbDataService {
                 )
             ).pipe(rxjs.operators.switchMap((_data: any) => _data));
         }
-
-        if (!this.bbdata.hasOwnProperty(queryName)) {
+        console.log('this should not run if test!!!!');
+        if (!this.bbdata.hasOwnProperty(queryName) && !this.isTest(queryName)) {
             this.bbdata[queryName] = null;
             const data = fetch(`${this.bbDataUrl}/${queryName}`)
                 .then((res: any) => res.json())
