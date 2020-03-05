@@ -8,9 +8,13 @@
 
 /*! ./components/bb-data-basic-table */
 
+/*! ./components/bb-data-basic-table-alt */
+
 /*! all exports used */
 
 /*! exports provided: BbDataAbstractClass */
+
+/*! exports provided: BbDataBasicTableAltComponent */
 
 /*! exports provided: BbDataBasicTableComponent */
 
@@ -21,6 +25,8 @@
 /*! exports provided: bbDataVars */
 
 /*! exports used: BbDataAbstractClass */
+
+/*! exports used: BbDataBasicTableAltComponent */
 
 /*! exports used: BbDataBasicTableComponent */
 
@@ -55,3 +61,7 @@
 /*!*****************************************************!*\
   !*** ./client/ts/components/bb-data-basic-table.ts ***!
   \*****************************************************/
+
+/*!*********************************************************!*\
+  !*** ./client/ts/components/bb-data-basic-table-alt.ts ***!
+  \*********************************************************/

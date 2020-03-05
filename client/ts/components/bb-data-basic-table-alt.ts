@@ -3,7 +3,7 @@ declare var simpleDatatables: any;
 import { BbDataAbstractClass } from '../core/bb-data-abstract-class';
 import { BbDataService, IBbData } from '../core/bb-data-service';
 import { BbDataState, IBbDataState } from '../core/bb-data-state';
-export class BbDataBasicTableComponent extends BbDataAbstractClass {
+export class BbDataBasicTableAltComponent extends BbDataAbstractClass {
     static get observedAttributes() {
         return ['queryname', 'select', 'type', 'format'];
     }
@@ -34,13 +34,12 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
         );
         // console.log('[Bb Data Table - Basic Loaded]');
         this.attachShadow({ mode: 'open' });
-        // this.shadowRoot.appendChild(this.template);
         this.shadowRoot.appendChild(this.template.content.cloneNode(true));
-        this.queryName = this.getAttribute('queryName');
+        this.queryName = this.getAttribute('queryname');
         this.select = this.getAttribute('select');
         this.type = this.getAttribute('type');
         this.format = this.getAttribute('format');
-        // console.log(`[queryName] ${this.queryName}`);
+        console.log(`[queryName] ${this.queryName}`);
         // this.updateTable({});
         this.data = this.bbDataService.runQuery(this.queryName);
         this.dataState = new BbDataState(this.queryName);
@@ -119,6 +118,7 @@ export class BbDataBasicTableComponent extends BbDataAbstractClass {
 
         this.table = this.shadowRoot.querySelector('table');
         this.table.innerHTML = '';
+        this.dataTable = null;
         console.log('in bewtween data loading.......');
         this.dataTable = new simpleDatatables.DataTable(this.table, {
             data,

@@ -2,8 +2,10 @@ declare var window: Window & typeof globalThis;
 declare var simpleDatatables: any;
 
 import { BbDataBasicTableComponent } from './components/bb-data-basic-table';
+import { BbDataBasicTableAltComponent } from './components/bb-data-basic-table-alt';
 
 customElements.define('bb-data-table-basic', BbDataBasicTableComponent);
+customElements.define('bb-data-table-basic-alt', BbDataBasicTableAltComponent);
 // console.log('created irsc custom elements...');
 const bbDataDemo = window.document.getElementById('bb-data-demo');
 
