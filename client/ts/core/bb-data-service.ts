@@ -1,7 +1,7 @@
 declare var window: any;
 declare var rxjs: any;
 import { bbDataVars } from '../bb-data-variables';
-import { IBbDataState } from './bb-data-state';
+import { BbDataState } from './bb-data-state';
 export interface IBbData {
     [key: string]: any;
 }
@@ -9,9 +9,8 @@ export interface IBbData {
 export class BbDataService {
     // tslint:ignore
     public bbdata: any;
-    private unsubscribe: any = new rxjs.Subject();
     private bbDataUrl: string = `${bbDataVars.host}/queries`;
-    private dataState: IBbDataState;
+    private dataState: BbDataState = new BbDataState();
 
     constructor() {
         if (!window.hasOwnProperty('bbdata')) {
@@ -37,10 +36,6 @@ export class BbDataService {
         return false;
     }
 
-    public addToBbData(queryName: string, data: any = null) {
-        this.bbdata.set(queryName, data);
-    }
-
     public runQuery(queryName: string, params: any = null) {
         console.log(`[BbDataState.runQuery('${queryName}', ${params})]`);
         if (this.isTest(queryName)) {
@@ -48,7 +43,10 @@ export class BbDataService {
             fetch(`${bbDataVars.host}/test`)
                 .then((res: any) => res.json())
                 .then((_data: any) => {
-                    this.dataState.updateState(queryName, _data);
+                    console.log(_data);
+                    const state: any = {};
+                    state[queryName] = _data;
+                    this.dataState.updateState(state);
                 })
                 .catch((err: any) => {
                     console.log('There was a problem loading test query.....');
@@ -62,8 +60,12 @@ export class BbDataService {
             ) {
                 fetch(`${this.bbDataUrl}/${queryName}`)
                     .then((res: any) => res.json())
+                    // .then((res: any) => res.json())
                     .then((data: any) => {
-                        this.dataState.updateState(queryName, data);
+                        console.log(data);
+                        const state: any = {};
+                        state[queryName] = data;
+                        this.dataState.updateState(state);
                     })
                     .catch((err: any) => {
                         console.log(
@@ -75,7 +77,29 @@ export class BbDataService {
         }
     }
 
-    public disconnectedCallback() {
-        this.unsubscribe.next(null);
+    public async runQuery2(
+        queryName: string,
+        params: any = null
+    ): Promise<void> {
+        console.log(`[BbDataService.runQuery('${queryName}', ${params})]`);
+        let url = '';
+        if (this.isTest(queryName)) {
+            url = `${bbDataVars.host}/test`;
+        } else {
+            url = `${this.bbDataUrl}/${queryName}`;
+        }
+        console.log(`${bbDataVars.host}/test`);
+        try {
+            const _data = await fetch(url).then((res: any) => res.json());
+            console.log('[BbDataService.runQuery.fetch(url)]...', _data);
+            const state: any = {};
+            state[queryName] = _data;
+            return state;
+        } catch (err) {
+            console.log(
+                `There was an error in retrieving data with queryName: ${queryName}`
+            );
+            console.log(err);
+        }
     }
 }

@@ -27,6 +27,16 @@ export class BbDataState {
     public updateState(state: IBbDataState) {
         console.log(`[BbDataState.updateState()]`, state);
         this.state.next(state);
+        const event = new CustomEvent('bb-data-update', {
+            detail: state,
+            bubbles: true,
+            composed: true
+        });
+        window.document
+            .querySelectorAll("[class*='bb-data-table']")
+            .forEach((dt: any) => {
+                dt.dispatchEvent(event);
+            });
     }
 
     public getStateSlice(slice: string) {

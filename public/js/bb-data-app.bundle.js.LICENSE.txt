@@ -4,15 +4,15 @@
 
 /*! ../core/bb-data-service */
 
-/*! ../core/bb-data-state */
+/*! ./bb-data-state */
 
-/*! ./components/bb-data-basic-table-alt */
+/*! ./components/bb-data-basic-table-alt-2 */
 
 /*! all exports used */
 
 /*! exports provided: BbDataAbstractClass */
 
-/*! exports provided: BbDataBasicTableAltComponent */
+/*! exports provided: BbDataBasicTableAlt2Component */
 
 /*! exports provided: BbDataService */
 
@@ -22,7 +22,7 @@
 
 /*! exports used: BbDataAbstractClass */
 
-/*! exports used: BbDataBasicTableAltComponent */
+/*! exports used: BbDataBasicTableAlt2Component */
 
 /*! exports used: BbDataService */
 
@@ -52,6 +52,6 @@
   !*** ./client/ts/core/bb-data-abstract-class.ts ***!
   \**************************************************/
 
-/*!*********************************************************!*\
-  !*** ./client/ts/components/bb-data-basic-table-alt.ts ***!
-  \*********************************************************/
+/*!***********************************************************!*\
+  !*** ./client/ts/components/bb-data-basic-table-alt-2.ts ***!
+  \***********************************************************/
