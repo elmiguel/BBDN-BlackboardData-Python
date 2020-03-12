@@ -9,7 +9,7 @@ export class BbDataBasicTableAlt2Component extends BbDataAbstractClass {
     }
     private data: any; // BehaviorSubject()
     private table: any;
-    private dataTable: any;
+    private dataTable: any = null;
     private bbDataService: BbDataService = new BbDataService();
     private template: any;
     private queryName: string;
@@ -66,8 +66,11 @@ export class BbDataBasicTableAlt2Component extends BbDataAbstractClass {
         console.log('[updateTable] re-rendering table data...');
         console.log('=== DATA ===/>', this.data);
         this.table = this.shadowRoot.querySelector('table');
-        this.table.innerHTML = '';
-        // this.dataTable = null;
+        // this.table.innerHTML = '';
+        if (this.dataTable !== null) {
+            this.dataTable.destroy();
+        }
+
         this.dataTable = new simpleDatatables.DataTable(this.table, {
             data: this.data,
             columns: [
