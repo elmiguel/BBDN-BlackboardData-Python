@@ -4,6 +4,8 @@
 
 /*! ../core/bb-data-service */
 
+/*! ../core/bb-data-state */
+
 /*! ./bb-data-state */
 
 /*! ./components/bb-data-basic-table-alt-2 */

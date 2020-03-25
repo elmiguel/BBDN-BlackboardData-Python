@@ -10,7 +10,9 @@ export class BbDataBasicTableAlt2Component extends BbDataAbstractClass {
     private data: any; // BehaviorSubject()
     private table: any;
     private dataTable: any = null;
+    private dataState: IBbDataState;
     private bbDataService: BbDataService = new BbDataService();
+    private unsubscribe: any = new rxjs.Subject();
     private template: any;
     private queryName: string;
     private select: string;
@@ -37,13 +39,27 @@ export class BbDataBasicTableAlt2Component extends BbDataAbstractClass {
         this.select = this.getAttribute('select');
         this.type = this.getAttribute('type');
         this.format = this.getAttribute('format');
+        this.dataState = new BbDataState();
         console.log(`[queryName] ${this.queryName}`);
+        this.dataState.state
+            .pipe(
+                rxjs.operators.takeUntil(this.unsubscribe),
+                rxjs.operators.filter(() => this.queryName !== null)
+                // rxjs.operators.pluck(this.queryName)
+            )
+            .subscribe((data: IBbData) => {
+                console.log('Data State Changed!');
+                console.log('='.repeat(10));
+                console.log(data);
+                console.log('='.repeat(10));
+            });
     }
 
     public connectedCallback() {}
 
-    public disconnectedCallback() {}
-
+    public disconnectedCallback() {
+        this.unsubscribe.next();
+    }
     // Called anytime the 'selected' attribute is changed
     // BbDataAbstractClass contains this function, so consider
     // this as an override
