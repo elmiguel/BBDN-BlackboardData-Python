@@ -36,5 +36,12 @@ app_config = {
             'outfile': './output/ActivityEqualsSuccess.csv',
             'index': False
         }
+    },
+    'instructorActivityByTermAlt': {
+        'params': None,
+        'config': {
+            'outfile': './output/InstructorActivityByTermAlt.csv',
+            'index': False
+        }
     }
 }
